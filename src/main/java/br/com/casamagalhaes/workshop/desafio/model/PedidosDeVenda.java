@@ -28,7 +28,7 @@ public class PedidosDeVenda {
     private Double taxa;
     private Double valorTotal;
     private String status = "PENDENTE";
-    @OneToMany(cascade=CascadeType.PERSIST)
+    @OneToMany(cascade=CascadeType.ALL)
     @Size(min = 1, message = "Deve possuir pelo menos 1 item.")
     private List<Itens> itens = new ArrayList<Itens>();
 }
