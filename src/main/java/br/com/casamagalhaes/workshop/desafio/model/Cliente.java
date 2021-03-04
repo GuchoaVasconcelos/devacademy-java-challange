@@ -21,7 +21,14 @@ public class Cliente {
     private Endereço endereço;
     private String telefone;
 
-    @OneToMany(mappedBy = "cliente")
-    private List<PedidosDeVenda> pedidosDeVendaList;
+    public Cliente(String nome, @Valid Endereço endereço, String telefone) {
+        this.nome = nome;
+        this.endereço = endereço;
+        this.telefone = telefone;
+    }
+
+    public Cliente() {
+
+    }
 }
 
