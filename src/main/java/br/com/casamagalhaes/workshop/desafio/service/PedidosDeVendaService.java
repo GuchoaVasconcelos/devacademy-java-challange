@@ -2,6 +2,7 @@ package br.com.casamagalhaes.workshop.desafio.service;
 
 
 import br.com.casamagalhaes.workshop.desafio.model.PedidosDeVenda;
+import br.com.casamagalhaes.workshop.desafio.model.Status;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 public interface PedidosDeVendaService {
 
     PedidosDeVenda adicionar(PedidosDeVenda novoPedido);
+    void calcularValorTotal(PedidosDeVenda pedidosDeVenda);
     void remover(Long id);
     void atualizar(Long idPedidoAntigo, PedidosDeVenda novoPedido);
     List<PedidosDeVenda> listarPedidos();
