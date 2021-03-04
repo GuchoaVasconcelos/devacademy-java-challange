@@ -17,4 +17,15 @@ public class Endereço {
     private Integer numero;
     private String complemento;
     private String bairro;
+
+    public Endereço(String rua, Integer numero, String complemento, String bairro) {
+        this.rua = rua;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.bairro = bairro;
+    }
+
+    public Endereço() {
+        
+    }
 }
