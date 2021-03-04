@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 
 import javax.persistence.EntityNotFoundException;
@@ -22,6 +24,7 @@ public class PedidosDeVendaImpl implements PedidosDeVendaService {
     @Autowired
     private PedidosDeVendaRepository repository;
 
+    @Override
     public void calcularValorTotal(PedidosDeVenda pedidosDeVenda) {
         Double valorTotalProdutos = 0.0;
         for (Itens item : pedidosDeVenda.getItens()) {
@@ -53,6 +56,8 @@ public class PedidosDeVendaImpl implements PedidosDeVendaService {
         novoPedido.setStatus(pedidoExistente.getStatus());
         List<Itens> itensVelhos = pedidoExistente.getItens();
         List<Itens> itensNovos = novoPedido.getItens();
+
+
 
         for(int i = 0; i< itensNovos.size(); i++){
             itensNovos.get(i).setId(itensVelhos.get(i).getId());
@@ -110,9 +115,17 @@ public class PedidosDeVendaImpl implements PedidosDeVendaService {
                     return false;
                 }
                 break;
+            case "PENDENTE":
+            case "PRONTO":
+            case "PREPARANDO":
+                pedidosDeVenda.setStatus(novoStatus);
+                break;
+            default:
+                return false;
         }
 
         pedidosDeVenda.setStatus(novoStatus);
+        repository.saveAndFlush(pedidosDeVenda);
         return true;
     }
 }
