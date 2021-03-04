@@ -8,6 +8,7 @@ import org.hibernate.annotations.Cascade;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,14 +17,20 @@ import java.util.List;
 public class PedidosDeVenda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long pedido;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Cliente cliente;
-    private float valorTotalProdutos;
-    private float taxa;
-    private float valorTotal;
-    private String status;
-    @OneToMany
-    private List<Itens> itens = new ArrayList<>();
+    //    @OneToOne(cascade = CascadeType.ALL)
+    //    private Cliente cliente;
+    private String nomeCliente;
+    private String endereco;
+    private String telefone;
+    private Double valorTotalProdutos;
+    private Double taxa;
+    private Double valorTotal;
+    private String status = "PENDENTE";
+    @OneToMany(cascade=CascadeType.PERSIST)
+    @Size(min = 1, message = "Deve possuir pelo menos 1 item.")
+    private List<Itens> itens = new ArrayList<Itens>();
 }
+
+
