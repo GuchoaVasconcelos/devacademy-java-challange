@@ -1,5 +1,6 @@
 package br.com.casamagalhaes.workshop.desafio.service.impl;
 
+import br.com.casamagalhaes.workshop.desafio.model.Itens;
 import br.com.casamagalhaes.workshop.desafio.model.PedidosDeVenda;
 import br.com.casamagalhaes.workshop.desafio.repository.PedidosDeVendaRepository;
 import br.com.casamagalhaes.workshop.desafio.service.PedidosDeVendaService;
@@ -11,37 +12,58 @@ import org.springframework.stereotype.Service;
 
 
 import javax.persistence.EntityNotFoundException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
-    public class PedidosDeVendaImpl implements PedidosDeVendaService {
+public class PedidosDeVendaImpl implements PedidosDeVendaService {
 
     @Autowired
     private PedidosDeVendaRepository repository;
 
+    public void calcularValorTotal(PedidosDeVenda pedidosDeVenda) {
+        Double valorTotalProdutos = 0.0;
+        for (Itens item : pedidosDeVenda.getItens()) {
+            valorTotalProdutos += item.valorTotal();
+        }
+
+        pedidosDeVenda.setValorTotalProdutos(valorTotalProdutos);
+        pedidosDeVenda.setValorTotal(valorTotalProdutos + pedidosDeVenda.getTaxa());
+    }
+
     @Override
-    public PedidosDeVenda addPedido(PedidosDeVenda novoPedido) {
-        return repository.saveAndFlush(novoPedido);
+    public PedidosDeVenda adicionar(PedidosDeVenda novoPedido) {
+        calcularValorTotal(novoPedido);
+        return repository.save(novoPedido);
 
     }
 
     @Override
-    public void rmvPedido(Long removerPedido) {
+    public void remover(Long removerPedido) {
         repository.deleteById(removerPedido);
     }
 
     @Override
-    public PedidosDeVenda attPedido(Long idPedidoAntigo, PedidosDeVenda novoPedido) {
-        if(repository.existsById(idPedidoAntigo)){
-            if(idPedidoAntigo.equals(novoPedido.getId())){
-                return repository.saveAndFlush(novoPedido);
-            }else{
-                throw new UnsupportedOperationException("Pedido id: " + novoPedido.getId());
-            }
+
+    public void atualizar(Long id, PedidosDeVenda novoPedido) {
+
+        PedidosDeVenda pedidoExistente = repository.findById(id).orElseThrow(EntityNotFoundException::new);
+        novoPedido.setPedido(pedidoExistente.getPedido());
+        novoPedido.setStatus(pedidoExistente.getStatus());
+        List<Itens> itensVelhos = pedidoExistente.getItens();
+        List<Itens> itensNovos = novoPedido.getItens();
+
+        for(int i = 0; i< itensNovos.size(); i++){
+            itensNovos.get(i).setId(itensVelhos.get(i).getId());
         }
-        else{
-            throw new EntityNotFoundException("Produto id: " + novoPedido.getId());
-        }
+
+        novoPedido.setItens(itensNovos);
+
+
+
+        calcularValorTotal(novoPedido);
+        repository.saveAndFlush(novoPedido);
     }
 
     @Override
@@ -50,7 +72,7 @@ import java.util.List;
     }
 
 
-    public Page<PedidosDeVenda> listarPedidosPaginados(Integer numeroPagina, Integer tamanhoPagina){
+    public Page<PedidosDeVenda> listarPedidosPaginados(Integer numeroPagina, Integer tamanhoPagina) {
         Pageable pageable = PageRequest.of(numeroPagina, tamanhoPagina);
         return repository.findAll(pageable);
     }
@@ -62,7 +84,7 @@ import java.util.List;
 
 
     @Override
-    public boolean attStatus(Long id, String novoStatus) {
+    public boolean atualizarStatus(Long id, String novoStatus) {
         PedidosDeVenda pedidosDeVenda = repository.findById(id).orElseThrow(EntityNotFoundException::new);
         switch (novoStatus) {
             case "CANCELADO":
