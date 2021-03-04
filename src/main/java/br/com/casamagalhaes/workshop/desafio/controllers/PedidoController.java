@@ -2,6 +2,7 @@ package br.com.casamagalhaes.workshop.desafio.controllers;
 
 
 import br.com.casamagalhaes.workshop.desafio.model.PedidosDeVenda;
+import br.com.casamagalhaes.workshop.desafio.model.Status;
 import br.com.casamagalhaes.workshop.desafio.service.PedidosDeVendaService;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,21 +42,21 @@ public class PedidoController {
 
     @DeleteMapping(path = {"/{id}",""})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void rmvPedido(@PathVariable Long id){
+    public void removerPedido(@PathVariable Long id){
         PedidosDeVendaService.remover(id);
     }
 
 
     @PutMapping(path = {"/{id}"})
     @ResponseStatus(HttpStatus.OK)
-    public void attPedido(@PathVariable Long id, @Valid @RequestBody PedidosDeVenda novoPedido){
+    public void atualizarPedido(@PathVariable Long id, @Valid @RequestBody PedidosDeVenda novoPedido){
         PedidosDeVendaService.atualizar(id,novoPedido);
     }
 
     @PostMapping(path = {"/{id}/status"})
     @ResponseStatus(HttpStatus.OK)
-    public boolean attStatus(@PathVariable Long id, String novoStatus){
-        return PedidosDeVendaService.atualizarStatus(id, novoStatus);
+    public boolean atualizarStatus(@PathVariable Long id, @RequestBody Status novoStatus){
+        return PedidosDeVendaService.atualizarStatus(id, novoStatus.getStatus());
     }
 
 }
