@@ -64,28 +64,30 @@ import java.util.List;
     @Override
     public boolean attStatus(Long id, String novoStatus) {
         PedidosDeVenda pedidosDeVenda = repository.findById(id).orElseThrow(EntityNotFoundException::new);
-        if(novoStatus.equals("CANCELADO")){
-            if(pedidosDeVenda.getStatus().equals("EM_ROTA")||
-               pedidosDeVenda.getStatus().equals("ENTREGUE" )||
-               pedidosDeVenda.getStatus().equals("CANCELADO")){
-                return false;
-            }else{
-                pedidosDeVenda.setStatus(novoStatus);
-            }
-        }
-        else if(novoStatus.equals("EM_ROTA")){
-            if(pedidosDeVenda.getStatus().equals("PRONTO")){
-                pedidosDeVenda.setStatus(novoStatus);
-            }else{
-                return false;
-            }
-        }
-        else if(novoStatus.equals("ENTREGUE")){
-            if(pedidosDeVenda.getStatus().equals("EM_ROTA")){
-                pedidosDeVenda.setStatus(novoStatus);
-            }else{
-                return false;
-            }
+        switch (novoStatus) {
+            case "CANCELADO":
+                if (pedidosDeVenda.getStatus().equals("EM_ROTA") ||
+                        pedidosDeVenda.getStatus().equals("ENTREGUE") ||
+                        pedidosDeVenda.getStatus().equals("CANCELADO")) {
+                    return false;
+                } else {
+                    pedidosDeVenda.setStatus(novoStatus);
+                }
+                break;
+            case "EM_ROTA":
+                if (pedidosDeVenda.getStatus().equals("PRONTO")) {
+                    pedidosDeVenda.setStatus(novoStatus);
+                } else {
+                    return false;
+                }
+                break;
+            case "ENTREGUE":
+                if (pedidosDeVenda.getStatus().equals("EM_ROTA")) {
+                    pedidosDeVenda.setStatus(novoStatus);
+                } else {
+                    return false;
+                }
+                break;
         }
 
         pedidosDeVenda.setStatus(novoStatus);
