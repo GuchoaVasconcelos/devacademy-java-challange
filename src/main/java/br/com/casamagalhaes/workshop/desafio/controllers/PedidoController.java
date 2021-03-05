@@ -30,7 +30,7 @@ public class PedidoController {
         return PedidosDeVendaService.listarPedidos();
     }
 
-    @GetMapping(path = {"/id"})
+    @GetMapping(path = {"/{id}"})
     @ResponseStatus(HttpStatus.OK)
     public PedidosDeVenda listarPedido(@PathVariable Long id){
         return PedidosDeVendaService.listarPedido(id);
