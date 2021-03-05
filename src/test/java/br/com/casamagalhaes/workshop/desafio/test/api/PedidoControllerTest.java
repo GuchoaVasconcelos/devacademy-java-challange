@@ -2,6 +2,7 @@ package br.com.casamagalhaes.workshop.desafio.test.api;
 
 import br.com.casamagalhaes.workshop.desafio.model.Itens;
 import br.com.casamagalhaes.workshop.desafio.model.PedidosDeVenda;
+import br.com.casamagalhaes.workshop.desafio.model.Status;
 import br.com.casamagalhaes.workshop.desafio.service.PedidosDeVendaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -89,13 +90,33 @@ public class PedidoControllerTest {
                 .then()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
 
+    }
+
+    @Test
+    public void deveriaMudarStatus () throws JsonProcessingException{
+        Status status = new Status();
+        status.setStatus("PRONTO");
+
+        PedidosDeVenda pedidosDeVenda = given()
+                .spec(requisicao)
+                .body(objectMapper.writeValueAsString(dadoUmPedido()))
+                .when()
+                .post()
+                .then()
+                .statusCode(HttpStatus.SC_CREATED)
+                .extract()
+                .as(PedidosDeVenda.class);
+
+        assertNotNull(pedidosDeVenda, "pedido não foi cadastrado");
+
+
         given()
                 .spec(requisicao)
-                .body(objectMapper.writeValueAsString(pedidosDeVenda))
+                .body(objectMapper.writeValueAsString(status))
                 .when()
-                .get("/{id}", pedidosDeVenda.getPedido())
+                .post("/{id}/status", status.getStatus())
                 .then()
-                .statusCode(HttpStatus.SC_NOT_FOUND);
+                .statusCode(HttpStatus.SC_OK);
 
     }
 
