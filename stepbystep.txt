@@ -1,0 +1,14 @@
+
+
+1 - Abra a IDE
+2 - Dê run na aplicação. (Há testes criados, pode ser que ele reconheça os testes antes da main. Qualquer coisa, vá main -> br.com.casamalhaes.workshop.desafio -> Desafio
+3 - Para executar os testes, vá em test -> br.com.casamagalhaes.workshop.desafio -> test.api -> PedidoControllerTest. Lá você poderá executar os códigos de forma individual clicando no botão de Run que aparecerá logo em cima das f unções ou você pode dar Run na função principal e executá-los de uma vez só. Há 4 testes. O teste de adicionar e excluir estão funcionando. O teste de status tem hora que funciona, tem hora que não funciona, muitas vezes ou dando erro 500 ou apenas dando algum outro erro.
+
+4 - A documentação Swagger foi criada! :) O link é o a seguir:
+
+http://localhost:8080/swagger-ui/index.html?configUrl=/api-docs/swagger-config#/
+
+
+Observações:
+
+Há mais classes e reps criados do que estão sendo usados, inicialmente tentei desacoplar e aplicar CleanCode o máximo que consegui. Caso você comente as propriedades do Cliente e descomente o Cliente, com as alterações necessárias do JSON, a aplicação continua funcionando. Não cheguei a testar se os casos de testes todos funcionam, visto que eu testei tudo mais na parte que está feita.
