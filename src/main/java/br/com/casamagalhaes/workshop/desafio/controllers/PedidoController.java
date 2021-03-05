@@ -35,16 +35,10 @@ public class PedidoController {
     public PedidosDeVenda listarPedido(@PathVariable Long id){
         return PedidosDeVendaService.listarPedido(id);
     }
-//    @GetMapping(path = {"/",""})
-//    public Page<PedidosDeVenda> listarPedidosPaginado(@RequestParam Integer numeroPagina, @RequestParam Integer tamanhoPagina){
-//        return PedidosDeVendaService.listarPedidosPaginados(numeroPagina, tamanhoPagina);
-
-//    }
 
     @PostMapping(path = {"/",""})
     @ResponseStatus(HttpStatus.CREATED)
     public PedidosDeVenda adicionarPedido(@Valid @RequestBody PedidosDeVenda novoPedido){
-        System.out.println(novoPedido);
         return PedidosDeVendaService.adicionar(novoPedido);
     }
 
