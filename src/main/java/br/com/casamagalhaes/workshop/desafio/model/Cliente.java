@@ -6,7 +6,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import java.util.List;
 
 @Entity
 @Data
@@ -31,4 +30,3 @@ public class Cliente {
 
     }
 }
-
