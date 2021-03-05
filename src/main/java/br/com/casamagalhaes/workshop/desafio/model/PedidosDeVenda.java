@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,11 @@ public class PedidosDeVenda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pedido;
 
+    /*
+    *
+    * DESCRIÇÃO: O código também foi implementado com a entidade Cliente desacoplada.
+    * */
+
     // @OneToOne(cascade = CascadeType.ALL)
     // private Cliente cliente;
     private String nomeCliente;
@@ -28,7 +34,7 @@ public class PedidosDeVenda {
     private Double valorTotal;
     private String status = "PENDENTE";
     @OneToMany(cascade = CascadeType.ALL)
-    @Size(min = 1, message = "Deve possuir pelo menos 1 item.")
+    @NotNull
     private List<Itens> itens = new ArrayList<Itens>();
 
     public PedidosDeVenda(Long pedido, String nomeCliente, String endereco, String telefone, Double taxa, String status, @Size(min = 1, message = "Deve possuir pelo menos 1 item.") List<Itens> itens) {
