@@ -48,24 +48,17 @@ public class PedidosDeVendaImpl implements PedidosDeVendaService {
     }
 
     @Override
-
     public void atualizar(Long id, PedidosDeVenda novoPedido) {
-
         PedidosDeVenda pedidoExistente = repository.findById(id).orElseThrow(EntityNotFoundException::new);
         novoPedido.setPedido(pedidoExistente.getPedido());
         novoPedido.setStatus(pedidoExistente.getStatus());
         List<Itens> itensVelhos = pedidoExistente.getItens();
         List<Itens> itensNovos = novoPedido.getItens();
 
-
-
         for(int i = 0; i< itensNovos.size(); i++){
             itensNovos.get(i).setId(itensVelhos.get(i).getId());
         }
-
         novoPedido.setItens(itensNovos);
-
-
 
         calcularValorTotal(novoPedido);
         repository.saveAndFlush(novoPedido);
