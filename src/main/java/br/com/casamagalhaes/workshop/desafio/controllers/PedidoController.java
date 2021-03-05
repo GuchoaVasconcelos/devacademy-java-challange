@@ -5,6 +5,7 @@ import br.com.casamagalhaes.workshop.desafio.model.PedidosDeVenda;
 import br.com.casamagalhaes.workshop.desafio.model.Status;
 import br.com.casamagalhaes.workshop.desafio.service.PedidosDeVendaService;
 import ch.qos.logback.core.net.SyslogOutputStream;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@Tag(name = "pedidos")
 @RestController
 @RequestMapping(path = "/api/v1/pedidos")
 public class PedidoController {
@@ -23,13 +25,20 @@ public class PedidoController {
     private PedidosDeVendaService PedidosDeVendaService;
 
     @GetMapping(path = {"/",""})
+    @ResponseStatus(HttpStatus.OK)
     public List<PedidosDeVenda> listarPedidos(){
         return PedidosDeVendaService.listarPedidos();
     }
 
+    @GetMapping(path = {"/id"})
+    @ResponseStatus(HttpStatus.OK)
+    public PedidosDeVenda listarPedido(@PathVariable Long id){
+        return PedidosDeVendaService.listarPedido(id);
+    }
 //    @GetMapping(path = {"/",""})
 //    public Page<PedidosDeVenda> listarPedidosPaginado(@RequestParam Integer numeroPagina, @RequestParam Integer tamanhoPagina){
 //        return PedidosDeVendaService.listarPedidosPaginados(numeroPagina, tamanhoPagina);
+
 //    }
 
     @PostMapping(path = {"/",""})
@@ -40,7 +49,7 @@ public class PedidoController {
     }
 
 
-    @DeleteMapping(path = {"/{id}",""})
+    @DeleteMapping(path = {"/{id}"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removerPedido(@PathVariable Long id){
         PedidosDeVendaService.remover(id);
@@ -52,7 +61,6 @@ public class PedidoController {
     public void atualizarPedido(@PathVariable Long id, @Valid @RequestBody PedidosDeVenda novoPedido){
         PedidosDeVendaService.atualizar(id,novoPedido);
     }
-
     @PostMapping(path = {"/{id}/status"})
     @ResponseStatus(HttpStatus.OK)
     public boolean atualizarStatus(@PathVariable Long id, @RequestBody Status novoStatus){
